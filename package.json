@@ -1,0 +1,44 @@
+{
+  "private": true,
+  "name": "@alex7kom/diamonds",
+  "version": "0.0.1",
+  "description": "",
+  "main": "diamonds.js",
+  "scripts": {
+    "test": "run-s test:*",
+    "test:jest": "jest",
+    "tsc": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint --max-warnings 0 \"src/**/*.{j,t}s?(x)\"",
+    "test:lint": "npm run lint",
+    "pretty": "prettier --write \"src/**/*.{j,t}s?(x)\"",
+    "build": "run-s build:*",
+    "build:void": ":",
+    "build:tsc": "tsc -p tsconfig.json",
+    "prepublishOnly": "run-s build:*"
+  },
+  "author": "Alexey Komarov <alex7kom@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@alex7kom/sayonara-config": "0.12.2",
+    "husky": "3.1.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/@alex7kom/sayonara-config/src/configs/eslint-node-ts.js",
+      "./node_modules/@alex7kom/sayonara-config/src/configs/eslint-jest.js"
+    ],
+    "overrides": []
+  },
+  "eslintIgnore": [],
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged && npm run lint"
+    }
+  },
+  "sayonaraConfig": {
+    "sets": [
+      "node-app-ts",
+      "npm-package"
+    ]
+  }
+}

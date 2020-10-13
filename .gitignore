@@ -1,0 +1,21 @@
+# deps
+node_modules
+
+# build
+build
+
+# IDEs
+.vscode
+.idea
+
+# tests
+coverage
+
+# ts
+*.d.ts
+
+# trash
+.DS_Store
+
+## DO NOT EDIT ABOVE THIS LINE ##
+package-lock.json

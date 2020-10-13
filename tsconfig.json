@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "module": "CommonJS",
+    "strict": true,
+    "lib": ["es2017"],
+    "target": "es2015"
+  },
+  "exclude": ["node_modules", "**/node_modules/*"]
+}
