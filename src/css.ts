@@ -18,7 +18,7 @@ function HSLtoString(color: HSL): string {
  *
  * @return Gradient CSS string
  */
-function buildCSSGradient(data: Gradient): string {
+function buildLinearGradient(data: Gradient): string {
   const { angle, color, stop } = data;
 
   return `linear-gradient(${angle}deg, ${HSLtoString(
@@ -32,5 +32,5 @@ function buildCSSGradient(data: Gradient): string {
  * @return Array of CSS strings
  */
 export function renderCSSGradients(gradients: Gradient[]): string[] {
-  return gradients.map(buildCSSGradient);
+  return gradients.map(buildLinearGradient);
 }
