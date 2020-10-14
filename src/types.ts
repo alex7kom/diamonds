@@ -5,8 +5,19 @@ export type HSL = [
   alpha: number
 ];
 
-export interface Gradient {
+export interface LinearGradient {
+  type: 'LinearGradient';
   angle: number;
   color: HSL;
   stop: number;
 }
+
+export interface RadialGradient {
+  type: 'RadialGradient';
+  x: number;
+  y: number;
+  color: HSL;
+  stop: number;
+}
+
+export type Layer = LinearGradient | RadialGradient;

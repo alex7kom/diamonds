@@ -1,4 +1,4 @@
-import { HSL, Gradient } from './types';
+import { HSL, LinearGradient, RadialGradient, Layer } from './types';
 
 /**
  * Convert color value with HSL type to CSS string
@@ -14,11 +14,13 @@ function HSLtoString(color: HSL): string {
 }
 
 /**
+ * Build linear gradient
+ *
  * @param data Gradient data
  *
  * @return Gradient CSS string
  */
-function buildLinearGradient(data: Gradient): string {
+function buildLinearGradient(data: LinearGradient): string {
   const { angle, color, stop } = data;
 
   return `linear-gradient(${angle}deg, ${HSLtoString(
@@ -27,19 +29,50 @@ function buildLinearGradient(data: Gradient): string {
 }
 
 /**
- * @param gradients Raw gradients
+ * Build radial gradient
  *
- * @return Array of CSS strings
+ * @param data Gradient data
+ *
+ * @return Gradient CSS string
  */
-function renderCSSGradients(gradients: Gradient[]): string[] {
-  return gradients.map(buildLinearGradient);
+function buildRadialGradient(data: RadialGradient): string {
+  const { x, y, color, stop } = data;
+
+  return `radial-gradient(circle at ${x}% ${y}%, ${HSLtoString(
+    color
+  )} ${stop}%, transparent ${stop}%)`;
 }
 
 /**
- * @param gradients Raw gradients
+ * @param layer Layer data
  *
- * @return Set of linear gradients
+ * @return Gradient CSS string
  */
-export function renderCSS(gradients: Gradient[]): string {
-  return renderCSSGradients(gradients).join(', ');
+function buildLayer(layer: Layer): string {
+  if (layer.type === 'LinearGradient') {
+    return buildLinearGradient(layer);
+  }
+  if (layer.type === 'RadialGradient') {
+    return buildRadialGradient(layer);
+  }
+
+  throw new Error('Unknown layer type');
+}
+
+/**
+ * @param layers Raw layer data
+ *
+ * @return Array of CSS strings
+ */
+function renderCSSLayers(layers: Layer[]): string[] {
+  return layers.map(buildLayer);
+}
+
+/**
+ * @param layers Raw layer data
+ *
+ * @return Set of gradient or color layers
+ */
+export function renderCSS(layers: Layer[]): string {
+  return renderCSSLayers(layers).join(', ');
 }

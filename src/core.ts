@@ -1,12 +1,13 @@
 import { clip, getRandomInt, applyOpacity, getRandomColors } from './utils';
-import { HSL, Gradient } from './types';
+import { HSL, LinearGradient, RadialGradient, Layer } from './types';
 
 interface Options {
+  type: 'linear' | 'radial';
   colors?: HSL[];
   randomColorsNumber?: number;
   shades?: number;
   shadeVariance?: number;
-  angle?: number;
+  linearAngle?: number;
   opacity?: number;
 }
 
@@ -62,12 +63,34 @@ function createLinearGradient(
   color: HSL,
   angle: number | undefined,
   opacity = 0.3
-): Gradient {
+): LinearGradient {
   const resultColor = applyOpacity(color, opacity);
   const colorStop = getRandomInt(0, 100);
 
-  const gradient: Gradient = {
+  const gradient: LinearGradient = {
+    type: 'LinearGradient',
     angle: angle || getRandomInt(1, 360),
+    color: resultColor,
+    stop: colorStop,
+  };
+
+  return gradient;
+}
+
+/**
+ * @param color Color
+ * @param opacity Opacity
+ *
+ * @return Gradient data
+ */
+function createRadialGradient(color: HSL, opacity = 0.3): RadialGradient {
+  const resultColor = applyOpacity(color, opacity);
+  const colorStop = getRandomInt(5, 20);
+
+  const gradient: RadialGradient = {
+    type: 'RadialGradient',
+    x: getRandomInt(0, 100),
+    y: getRandomInt(0, 100),
     color: resultColor,
     stop: colorStop,
   };
@@ -80,13 +103,14 @@ function createLinearGradient(
  *
  * @return Raw array of gradient data
  */
-export function createDiamonds(options: Options): Gradient[] {
+export function createDiamonds(options: Options): Layer[] {
   const {
+    type,
     colors: inputColors,
     randomColorsNumber,
     shades,
     shadeVariance,
-    angle,
+    linearAngle,
     opacity,
   } = options;
 
@@ -114,8 +138,10 @@ export function createDiamonds(options: Options): Gradient[] {
     }
   }
 
-  const gradients = allShades.map((color) =>
-    createLinearGradient(color, angle, opacity)
+  const gradients: Layer[] = allShades.map((color) =>
+    type === 'linear'
+      ? createLinearGradient(color, linearAngle, opacity)
+      : createRadialGradient(color, opacity)
   );
 
   return gradients;
