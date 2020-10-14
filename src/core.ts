@@ -7,6 +7,22 @@ import {
 } from './utils';
 import { HSL, LinearGradient, RadialGradient, Layer, Color } from './types';
 
+interface LinearGradientOptions {
+  angleMin?: number;
+  angleMax?: number;
+  min?: number;
+  max?: number;
+}
+
+interface RadialGradientOptions {
+  xMin?: number;
+  xMax?: number;
+  yMin?: number;
+  yMax?: number;
+  min?: number;
+  max?: number;
+}
+
 interface Options {
   type: 'linear' | 'radial';
   colors?: HSL[];
@@ -14,7 +30,8 @@ interface Options {
   background?: HSL | 'random';
   shades?: number;
   shadeVariance?: number;
-  linearAngle?: number;
+  linearGradientOptions?: LinearGradientOptions;
+  radialGradientOptions?: RadialGradientOptions;
   opacity?: number;
 }
 
@@ -61,22 +78,23 @@ function createColorShades(color: HSL, shades: number, shadeVariance: number) {
 
 /**
  * @param color Color
- * @param angle Angle
  * @param opacity Opacity
+ * @param options Options
  *
  * @return Gradient data
  */
 function createLinearGradient(
   color: HSL,
-  angle: number | undefined,
-  opacity = 0.3
+  opacity = 0.3,
+  options: LinearGradientOptions = {}
 ): LinearGradient {
+  const { angleMin = 1, angleMax = 360, min = 5, max = 95 } = options;
   const resultColor = applyOpacity(color, opacity);
-  const colorStop = getRandomInt(0, 100);
+  const colorStop = getRandomInt(min, max);
 
   const gradient: LinearGradient = {
     type: 'LinearGradient',
-    angle: angle || getRandomInt(1, 360),
+    angle: getRandomInt(angleMin, angleMax),
     color: resultColor,
     stop: colorStop,
   };
@@ -87,17 +105,30 @@ function createLinearGradient(
 /**
  * @param color Color
  * @param opacity Opacity
+ * @param options Options
  *
  * @return Gradient data
  */
-function createRadialGradient(color: HSL, opacity = 0.3): RadialGradient {
+function createRadialGradient(
+  color: HSL,
+  opacity = 0.3,
+  options: RadialGradientOptions = {}
+): RadialGradient {
+  const {
+    min = 5,
+    max = 20,
+    xMin = 0,
+    xMax = 100,
+    yMin = 0,
+    yMax = 100,
+  } = options;
   const resultColor = applyOpacity(color, opacity);
-  const colorStop = getRandomInt(5, 20);
+  const colorStop = getRandomInt(min, max);
 
   const gradient: RadialGradient = {
     type: 'RadialGradient',
-    x: getRandomInt(0, 100),
-    y: getRandomInt(0, 100),
+    x: getRandomInt(xMin, xMax),
+    y: getRandomInt(yMin, yMax),
     color: resultColor,
     stop: colorStop,
   };
@@ -130,7 +161,8 @@ export function createDiamonds(options: Options): Layer[] {
     background,
     shades,
     shadeVariance,
-    linearAngle,
+    linearGradientOptions,
+    radialGradientOptions,
     opacity,
   } = options;
 
@@ -160,8 +192,8 @@ export function createDiamonds(options: Options): Layer[] {
 
   const layers: Layer[] = allShades.map((color) =>
     type === 'linear'
-      ? createLinearGradient(color, linearAngle, opacity)
-      : createRadialGradient(color, opacity)
+      ? createLinearGradient(color, opacity, linearGradientOptions)
+      : createRadialGradient(color, opacity, radialGradientOptions)
   );
 
   if (background) {
