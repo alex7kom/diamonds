@@ -31,6 +31,15 @@ function buildLinearGradient(data: Gradient): string {
  *
  * @return Array of CSS strings
  */
-export function renderCSSGradients(gradients: Gradient[]): string[] {
+function renderCSSGradients(gradients: Gradient[]): string[] {
   return gradients.map(buildLinearGradient);
+}
+
+/**
+ * @param gradients Raw gradients
+ *
+ * @return Set of linear gradients
+ */
+export function renderCSS(gradients: Gradient[]): string {
+  return renderCSSGradients(gradients).join(', ');
 }

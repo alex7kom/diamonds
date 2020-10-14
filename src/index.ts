@@ -1,6 +1,6 @@
 import { HSL, Gradient } from './types';
 
-export { renderCSSGradients } from './css';
+export { renderCSS } from './css';
 
 interface Options {
   colors?: HSL[];
