@@ -12,13 +12,18 @@ interface Options {
 }
 
 /**
+ * Get a random integer between two values, inclusive
+ *
  * @param min Minimum number
  * @param max Maximum number
  *
  * @return Random integer number
  */
-export function getRandomInt(min: number, max: number) {
-  return min + Math.floor(Math.random() * (max - min));
+function getRandomInt(min: number, max: number): number {
+  const minInt = Math.ceil(min);
+  const maxInt = Math.floor(max);
+
+  return Math.floor(Math.random() * (maxInt - minInt + 1) + minInt);
 }
 
 /**
