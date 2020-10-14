@@ -20,4 +20,9 @@ export interface RadialGradient {
   stop: number;
 }
 
-export type Layer = LinearGradient | RadialGradient;
+export interface Color {
+  type: 'Color';
+  color: HSL;
+}
+
+export type Layer = LinearGradient | RadialGradient | Color;

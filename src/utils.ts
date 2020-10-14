@@ -18,7 +18,7 @@ export function getRandomInt(min: number, max: number): number {
 /**
  * @return Random color in HSL
  */
-function getRandomColor(): HSL {
+export function getRandomColor(): HSL {
   return [getRandomInt(0, 360), getRandomInt(0, 100), getRandomInt(0, 100), 1];
 }
 

@@ -52,8 +52,13 @@ function buildLayer(layer: Layer): string {
   if (layer.type === 'LinearGradient') {
     return buildLinearGradient(layer);
   }
+
   if (layer.type === 'RadialGradient') {
     return buildRadialGradient(layer);
+  }
+
+  if (layer.type === 'Color') {
+    return HSLtoString(layer.color);
   }
 
   throw new Error('Unknown layer type');

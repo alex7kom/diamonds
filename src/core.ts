@@ -1,10 +1,17 @@
-import { clip, getRandomInt, applyOpacity, getRandomColors } from './utils';
-import { HSL, LinearGradient, RadialGradient, Layer } from './types';
+import {
+  clip,
+  getRandomInt,
+  applyOpacity,
+  getRandomColors,
+  getRandomColor,
+} from './utils';
+import { HSL, LinearGradient, RadialGradient, Layer, Color } from './types';
 
 interface Options {
   type: 'linear' | 'radial';
   colors?: HSL[];
   randomColorsNumber?: number;
+  background?: HSL | 'random';
   shades?: number;
   shadeVariance?: number;
   linearAngle?: number;
@@ -99,6 +106,18 @@ function createRadialGradient(color: HSL, opacity = 0.3): RadialGradient {
 }
 
 /**
+ * @param color Color
+ *
+ * @return Background data
+ */
+function createBackground(color?: HSL): Color {
+  return {
+    type: 'Color',
+    color: color || getRandomColor(),
+  };
+}
+
+/**
  * @param options options
  *
  * @return Raw array of gradient data
@@ -108,6 +127,7 @@ export function createDiamonds(options: Options): Layer[] {
     type,
     colors: inputColors,
     randomColorsNumber,
+    background,
     shades,
     shadeVariance,
     linearAngle,
@@ -138,11 +158,15 @@ export function createDiamonds(options: Options): Layer[] {
     }
   }
 
-  const gradients: Layer[] = allShades.map((color) =>
+  const layers: Layer[] = allShades.map((color) =>
     type === 'linear'
       ? createLinearGradient(color, linearAngle, opacity)
       : createRadialGradient(color, opacity)
   );
 
-  return gradients;
+  if (background) {
+    layers.push(createBackground());
+  }
+
+  return layers;
 }
